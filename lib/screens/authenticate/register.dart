@@ -29,7 +29,7 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return loading ? Loading() : Scaffold(
-      backgroundColor: secondaryLoginColor,
+      backgroundColor: loginColor,
       appBar: AppBar(
         title: Text(
           "Sign up to Rivi",
@@ -104,11 +104,7 @@ class _RegisterState extends State<Register> {
                     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 2),
                     child: Text(
                       "Register",
-                      style: TextStyle(
-                        color: primaryTextColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18
-                      ),
+                      style: buttonStyle(),
                     ),
                   ),
                   color: primaryColor,

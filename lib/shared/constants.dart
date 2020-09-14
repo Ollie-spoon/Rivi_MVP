@@ -13,4 +13,13 @@ InputDecoration textInputDecoration(text) {
     borderSide: BorderSide(color: primaryColor, width: 2.0),
     ),
   );
+
+}
+
+TextStyle buttonStyle() {
+  return TextStyle(
+      color: primaryTextColor,
+      fontWeight: FontWeight.bold,
+      fontSize: 18
+  );
 }

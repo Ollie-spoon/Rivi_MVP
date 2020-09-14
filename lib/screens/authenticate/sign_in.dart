@@ -27,7 +27,7 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return loading ? Loading() : Scaffold(
-      backgroundColor: secondaryLoginColor,
+      backgroundColor: loginColor,
       appBar: AppBar(
         title: Text(
           "Sign in to Rivi",
@@ -86,11 +86,7 @@ class _SignInState extends State<SignIn> {
               RaisedButton(
                 child: Text(
                   "Sign in",
-                  style: TextStyle(
-                    color: primaryTextColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18
-                ),
+                  style: buttonStyle(),
                 ),
                 color: primaryColor,
                 onPressed: () async {
