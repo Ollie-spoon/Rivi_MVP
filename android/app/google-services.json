@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1058098646741",
+    "firebase_url": "https://rivi-mvp.firebaseio.com",
+    "project_id": "rivi-mvp",
+    "storage_bucket": "rivi-mvp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1058098646741:android:06fd2bac3fe905bb65dc5c",
+        "android_client_info": {
+          "package_name": "com.rivi_app.rivi_mvp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1058098646741-b5a27gs51qv67bkg1f4c2q1u5mit0trn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6SxPLLVLS2gOd9XvvYTjm4-qoa-yi76k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1058098646741-b5a27gs51qv67bkg1f4c2q1u5mit0trn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
