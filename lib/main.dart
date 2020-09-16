@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
           );
         },
         home: Wrapper(),
+        title: "Rivi",
       ),
     );
   }
