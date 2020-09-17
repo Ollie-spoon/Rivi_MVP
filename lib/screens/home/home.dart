@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rivi_mvp/models/user.dart';
+import 'package:rivi_mvp/models/models.dart';
 import 'package:rivi_mvp/screens/home/beacon_list.dart';
 import 'package:rivi_mvp/services/auth.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +13,7 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
+    //final user = Provider.of<User>(context);
 
     return StreamProvider<List<Beacon>>.value(
         value: DatabaseService().brews,

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:rivi_mvp/models/user.dart';
+import 'package:rivi_mvp/models/models.dart';
 
 class DatabaseService {
 

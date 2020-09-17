@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rivi_mvp/models/user.dart';
+import 'package:rivi_mvp/models/models.dart';
 import 'package:rivi_mvp/screens/authenticate/authenticate.dart';
 import 'package:rivi_mvp/screens/home/home.dart';
 import 'package:provider/provider.dart';

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rivi_mvp/models/user.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:rivi_mvp/models/models.dart';
 
 class BeaconTile extends StatelessWidget {
 

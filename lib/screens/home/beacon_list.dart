@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rivi_mvp/screens/home/beacon_tile.dart';
 import 'package:provider/provider.dart';
-import 'package:rivi_mvp/models/user.dart';
+import 'package:rivi_mvp/models/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class BeaconList extends StatefulWidget {
