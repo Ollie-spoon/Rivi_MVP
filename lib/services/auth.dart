@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:rivi_mvp/models/user.dart';
+import 'package:rivi_mvp/models/models.dart';
 import 'package:rivi_mvp/services/database.dart';
 
 class AuthService {

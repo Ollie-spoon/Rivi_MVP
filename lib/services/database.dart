@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:rivi_mvp/models/user.dart';
+import 'package:rivi_mvp/models/models.dart';
 
 class DatabaseService {
 
@@ -19,52 +19,72 @@ class DatabaseService {
     });
   }
 
-  int convertDateTime(String dateTime) {
-    dateTime = dateTime.substring(0, dateTime.length - 10);
-    dateTime = dateTime.replaceAll(" ", "");
-    dateTime = dateTime.replaceAll("-", "");
-    dateTime = dateTime.replaceAll(":", "");
-    return int.parse(dateTime);
-  }
-
-  final DocumentReference userLocCollection2 = Firestore.instance.collection(
-      "LocationData").document("userData");
+  final DocumentReference userLocCollection2 = Firestore.instance.collection("LocationData").document("userData");
 
   Future uploadLocData(String locationKey, DateTime time, bool start,) async {
-    int stringTime = convertDateTime(time.toUtc().toString());
-    return await userLocCollection2.collection(uid)
-        .document(locationKey).setData({
-      "time": {stringTime, start ? "1" : "0"}.join(),
-    });
-  }
-
-
-  Future uploadLocData2(String locationKey, DateTime time, bool start,) async {
-    int stringTime = convertDateTime(time.toUtc().toString());
+    String startString = start ? "start" : "end";
     try {
+      print("If this is all you can see then it has worked");
       return await userLocCollection2.collection(uid)
-          .document(locationKey).updateData(
-          {"time": FieldValue.arrayUnion([stringTime]),});
+          .document(locationKey).setData(
+          {startString: FieldValue.arrayUnion([time.toUtc()]),});
     } catch (e) {
       print(e.toString());
     }
   }
 
-  final CollectionReference beaconCollection = Firestore.instance.collection("LocationData");
-
-  // beacon list from snapshot
-  List<Beacon> _beaconListFromSnapshot(QuerySnapshot snapshot) {
-    List<Beacon> x = [];
-    return snapshot.documents.map((doc) {
-      for (Map data in doc.data["Beacons"]) {
-        x.add(Beacon(bid: data["bid"],));
-      }
-      return x;
-    }).toList()[0];
+  Future uploadLocData2(String locationKey, DateTime time, bool start,) async {
+    String startString = start ? "start" : "end";
+    String _startString = start ? "end" : "start";
+    DocumentReference dbLocation = userLocCollection2.collection(uid).document(locationKey);
+    try {
+      await dbLocation.get().then((value) {
+        if (value.exists) {
+          print(value.data);
+          List<dynamic> timeList = value.data[locationKey];
+          int last = timeList.length-1;
+          if (timeList[last]["end"] == null) {
+            timeList[last] = {startString: timeList[last]["start"], _startString: time.toUtc(),};
+            dbLocation.setData({locationKey: FieldValue.arrayUnion(timeList)});
+          }
+        } else {
+          dbLocation.setData({locationKey: FieldValue.arrayUnion([{startString: time.toUtc(), _startString: null,},])});
+        }
+      });
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
-  Stream<List<Beacon>> get brews {
-    return beaconCollection.snapshots().map(_beaconListFromSnapshot);
+  Future deleteLocData(String locationKey,) async {
+    try {
+      return await userLocCollection2.collection(uid).document(locationKey).delete();
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
+  Future uploadLocData3(String locationKey, DateTime time, bool start) async {
+    DocumentReference dbLocation = userLocCollection2.collection(uid).document(locationKey);
+    try {
+      await dbLocation.get().then((value) {
+        if ((!value.exists) & start) {
+          dbLocation.setData({locationKey: FieldValue.arrayUnion([{"start": time.toUtc(), "end": null,},])});
+        } else {
+          List<dynamic> timeList = value.data[locationKey];
+          int last = timeList.length-1;
+          if ((timeList[last]["end"] == null) & (!start)) {
+            timeList[last] = {"start": timeList[last]["start"], "end": time.toUtc(),};
+            dbLocation.setData({locationKey: FieldValue.arrayUnion(timeList)});
+          }
+          if (start) {
+            timeList.add({"start": time.toUtc(), "end": null,});
+            dbLocation.updateData({locationKey: FieldValue.arrayUnion(timeList)});
+          }
+        }
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 }
