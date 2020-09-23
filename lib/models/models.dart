@@ -29,8 +29,14 @@ class TimeLocation {
   int totalTime () {
     return end.difference(start).inMinutes;
   }
+}
 
+// user class to store a list of locations in a duration
+class LocationList {
 
+  final List<String> lList;
+  final Duration duration;
 
+  LocationList({this.lList, this.duration});
 
 }

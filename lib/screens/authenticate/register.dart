@@ -22,7 +22,7 @@ class _RegisterState extends State<Register> {
 
   // text field state
   String email = "";
-  String password = "";
+  String _password = "";
   String name = "";
   String error = "";
 
@@ -86,15 +86,15 @@ class _RegisterState extends State<Register> {
                 ),
                 SizedBox(height: 20,),
                 TextFormField(
-                  initialValue: password,
-                  decoration: textInputDecoration("Password"),
+                  initialValue: _password,
+                  decoration: textInputDecoration("password"),
                   validator: (val) {
-                    return val.length < 6 ? "Enter password 6+ chars long" : null;
+                    return val.isEmpty ? "This is a required field" : null;
                   },
                   obscureText: true,
                   onChanged: (val) {
                     setState(() {
-                      password = val;
+                      _password = val;
                     });
                   },
                 ),
@@ -109,14 +109,19 @@ class _RegisterState extends State<Register> {
                   ),
                   color: primaryColor,
                   onPressed: () async {
-                    if (_formKey.currentState.validate()) {
+                    if (_formKey.currentState.validate() && validate(_password)) {
                       setState(() {
                         loading = true;
                       });
-                      dynamic result = await _auth.registerWithEmailAndPassword(email, password, name,);
-                      if (result == null) {
+                      validate(_password);
+                      dynamic result = await _auth.registerWithEmailAndPassword(email, _password, name,);
+                      print(result.toString());
+                      if (result.runtimeType == String) {
+                        if (result == "#") {
+                          result = "Please ensure password is 8+ characters long and includes:\n• An upper case character\n• Lower case character\n• Number\n• special character";
+                        }
                         setState(() {
-                          error = "Please supply valid email";
+                          error = result;
                           loading = false;
                         });
                       }
@@ -138,4 +143,19 @@ class _RegisterState extends State<Register> {
       ),
     );
   }
+  bool validate(String text) {
+    if (!validateStructure(text)) {
+      setState(() {
+        error = "Please ensure password is 8+ characters long and includes:\n• An upper case character\n• Lower case character\n• Number\n• special character";
+      });
+      return false;
+    }
+    return true;
+  }
+}
+
+bool validateStructure(String value){
+  String  pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+  RegExp regExp = new RegExp(pattern);
+  return regExp.hasMatch(value);
 }

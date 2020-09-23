@@ -95,9 +95,10 @@ class _SignInState extends State<SignIn> {
                       loading = true;
                     });
                     dynamic result = await _auth.signInWithEmailAndPassword(email, password);
-                    if (result == null) {
+                    print(result.toString());
+                    if (result.runtimeType == String) {
                       setState(() {
-                        error = "Email and password not found";
+                        error = result;
                         loading = false;
                       });
                     }
@@ -108,10 +109,9 @@ class _SignInState extends State<SignIn> {
               Text(
                 error,
                 style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 14,
+                  color: Colors.red[400],
                 ),
-              ),
+              )
             ],
           ),
         ),
