@@ -92,7 +92,25 @@ class Home extends StatelessWidget {
                       "People in the last Eight Hours",
                     ),
                     onPressed: () {
-                      DatabaseService(uid: user.uid).peopleInLastEightHours(bid, Duration(hours: 8), true);
+                      DatabaseService(uid: user.uid).peopleInLastEightHours(bid, true);
+                    },
+                  ),
+                  SizedBox(height: 20,),
+                  RaisedButton(
+                    child: Text(
+                      "Upload random data",
+                    ),
+                    onPressed: () {
+                      DatabaseService(uid: user.uid).uploadRandomData(roundDateTime(DateTime.now().subtract(Duration(days: 1))));
+                    },
+                  ),
+                  SizedBox(height: 20,),
+                  RaisedButton(
+                    child: Text(
+                      "I have COVID",
+                    ),
+                    onPressed: () {
+                      DatabaseService(uid: user.uid).iHaveCovid("Ollie");
                     },
                   ),
                 ],
