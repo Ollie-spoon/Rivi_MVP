@@ -7,7 +7,7 @@ class DatabaseService {
   final String uid;
   Duration duration;
 
-  DatabaseService({this.uid = null, this.duration = const Duration(hours: 8)});
+  DatabaseService({this.uid, this.duration = const Duration(hours: 8)});
 
   // try {} catch(e) {print(e.toString());}
   // collection reference for user data

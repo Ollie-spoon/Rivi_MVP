@@ -1,3 +1,5 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rivi_mvp/models/models.dart';
 import 'package:rivi_mvp/services/auth.dart';
@@ -6,12 +8,62 @@ import 'package:rivi_mvp/services/database.dart';
 import 'package:rivi_mvp/shared/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  final FirebaseMessaging _fcm = FirebaseMessaging();
+  List<Message> _messages;
+
+  _getToken() {
+    _fcm.getToken().then((value) => print("Device token: $value"));
+  }
+
+  _configureFirebaseListeners() {
+    _fcm.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+        _setMessage(message);
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+        _setMessage(message);
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+        _setMessage(message);
+      },
+    );
+  }
 
   final String bid = "t1pw4cq85yn6h";
-  // final String bid = "1jfw4o9g7y5ks"; // this is the alternate value for the beacon ID from the database
 
   final AuthService _auth = AuthService();
+
+  _setMessage (Map<String, dynamic> message) {
+    final notification = message["notification"];
+    final data = message["data"];
+    final title = notification["title"];
+    final body = notification["body"];
+    final messageData = data["Message_key"];
+    Message m = Message(title: title, body: body, message: messageData);
+    setState(() {
+      _messages.add(m);
+    });
+
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _messages = List<Message>();
+    _getToken();
+    _configureFirebaseListeners();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,6 +165,29 @@ class Home extends StatelessWidget {
                       DatabaseService(uid: user.uid).iHaveCovid("Ollie");
                     },
                   ),
+                  SizedBox(height: _messages == null? 0 : 20,),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    height: _messages == null? 0 : _messages.length*60.0,
+                    child: ListView.builder(
+                      itemCount: _messages == null? 0 : _messages.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          child: Padding(
+                            padding: EdgeInsets.all(15),
+                            child: Text(
+                              _messages[index].message,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  //SizedBox(height: 160,),
                 ],
               ),
             ),
@@ -141,4 +216,9 @@ class LocationListButton extends StatelessWidget {
   }
 }
 
-
+class Message {
+  String title;
+  String body;
+  String message;
+  Message({this.title, this.body, this.message});
+}
